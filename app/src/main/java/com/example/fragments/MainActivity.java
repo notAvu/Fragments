@@ -50,7 +50,7 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.getTv().setText((listado.get(position).getName()+listado.get(position).getSurname()));
+        holder.getTv().setText((listado.get(position).getName()+" "+listado.get(position).getSurname()));
         holder.getImage().setImageResource(listado.get(position).getImgSource());
     }
 
