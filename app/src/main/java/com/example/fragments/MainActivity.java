@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast t= Toast.makeText(view.getContext(), vm.getContactsList().getValue().get(position).getName(), Toast.LENGTH_SHORT);
                 t.show();
             }
-
             public void onLongItemClick(View view, int position) {
 
             }
@@ -66,9 +65,7 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> {
         Contact si=listado.get(position);
         holder.getTv().setText((si.getName()+" "+si.getSurname()));
         holder.getImage().setImageResource(si.getImgSource());
-
     }
-
     @Override
     public int getItemCount() {
         return listado.toArray().length;
