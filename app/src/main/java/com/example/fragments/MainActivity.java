@@ -36,14 +36,14 @@ public class MainActivity extends AppCompatActivity {
         contacts= findViewById(R.id.contacts);
         contacts.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         contacts.setAdapter(new MyAdapter(vm.getContactsList().getValue()));
-        contacts.addOnItemTouchListener(new RecyclerItemClickListener(this, contacts ,new RecyclerItemClickListener.OnItemClickListener() {
-            @Override public void onItemClick(View view, int position) {
+        contacts.addOnItemTouchListener(new RecyclerItemClickListener(this, contacts ,new OnItemClickListener() {
+            public void onItemClick(View view, int position) {
                 Toast t= Toast.makeText(view.getContext(), vm.getContactsList().getValue().get(position).getName(), Toast.LENGTH_SHORT);
                 t.show();
             }
 
-            @Override public void onLongItemClick(View view, int position) {
-                // do whatever
+            public void onLongItemClick(View view, int position) {
+
             }
         }));
     }
@@ -74,50 +74,4 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> {
         return listado.toArray().length;
     }
 }
-class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
-    private OnItemClickListener mListener;
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-
-        void onLongItemClick(View view, int position);
-    }
-
-    GestureDetector mGestureDetector;
-
-    public RecyclerItemClickListener(Context context, final RecyclerView recyclerView, OnItemClickListener listener) {
-        mListener = listener;
-        mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return true;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent e) {
-                View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                if (child != null && mListener != null) {
-                    mListener.onLongItemClick(child, recyclerView.getChildAdapterPosition(child));
-                }
-            }
-        });
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent e) {
-        View childView = view.findChildViewUnder(e.getX(), e.getY());
-        if (childView != null && mListener != null && mGestureDetector.onTouchEvent(e)) {
-            mListener.onItemClick(childView, view.getChildAdapterPosition(childView));
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
-
-    }
-
-    @Override
-    public void onRequestDisallowInterceptTouchEvent (boolean disallowIntercept){}
-}
