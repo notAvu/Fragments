@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -16,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,16 @@ public class MainActivity extends AppCompatActivity {
         contacts= findViewById(R.id.contacts);
         contacts.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         contacts.setAdapter(new MyAdapter(vm.getContactsList().getValue()));
+        contacts.addOnItemTouchListener(new RecyclerItemClickListener(this, contacts ,new RecyclerItemClickListener.OnItemClickListener() {
+            @Override public void onItemClick(View view, int position) {
+                Toast t= Toast.makeText(view.getContext(), vm.getContactsList().getValue().get(position).getName(), Toast.LENGTH_SHORT);
+                t.show();
+            }
+
+            @Override public void onLongItemClick(View view, int position) {
+                // do whatever
+            }
+        }));
     }
 }
 class MyAdapter extends RecyclerView.Adapter<ViewHolder> {
@@ -50,13 +63,61 @@ class MyAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.getTv().setText((listado.get(position).getName()+" "+listado.get(position).getSurname()));
-        holder.getImage().setImageResource(listado.get(position).getImgSource());
+        Contact si=listado.get(position);
+        holder.getTv().setText((si.getName()+" "+si.getSurname()));
+        holder.getImage().setImageResource(si.getImgSource());
+
     }
 
     @Override
     public int getItemCount() {
         return listado.toArray().length;
     }
+}
+class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
+    private OnItemClickListener mListener;
 
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+
+        void onLongItemClick(View view, int position);
+    }
+
+    GestureDetector mGestureDetector;
+
+    public RecyclerItemClickListener(Context context, final RecyclerView recyclerView, OnItemClickListener listener) {
+        mListener = listener;
+        mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+                View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                if (child != null && mListener != null) {
+                    mListener.onLongItemClick(child, recyclerView.getChildAdapterPosition(child));
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent e) {
+        View childView = view.findChildViewUnder(e.getX(), e.getY());
+        if (childView != null && mListener != null && mGestureDetector.onTouchEvent(e)) {
+            mListener.onItemClick(childView, view.getChildAdapterPosition(childView));
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent (boolean disallowIntercept){}
 }
