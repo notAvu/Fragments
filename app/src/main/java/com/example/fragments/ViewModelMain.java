@@ -1,13 +1,17 @@
 package com.example.fragments;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import Clases.Contact;
 
-public class ViewModelMain extends ViewModel {
+public class ViewModelMain extends ViewModel implements Serializable {
    private MutableLiveData<ArrayList<Contact>> contactsList;
 
 

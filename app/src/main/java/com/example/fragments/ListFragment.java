@@ -18,17 +18,17 @@ public class ListFragment extends Fragment {
     {
         super(R.layout.fragment_list);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View infl= inflater.inflate(R.layout.fragment_list, container, false);
-        vm = new ViewModelMain();
+        vm = (ViewModelMain) savedInstanceState.getSerializable("viewModel");
         contacts= infl.findViewById(R.id.contacts);
         contacts.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         contacts.setAdapter(new MyAdapter(vm.getContactsList().getValue()));
         contacts.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), contacts ,new OnItemClickListener() {
             public void onItemClick(View view, int position) {
-                Toast t= Toast.makeText(view.getContext(), vm.getContactsList().getValue().get(position).getName(), Toast.LENGTH_SHORT);
-                t.show();
+                vm.getSelectedContact().setValue(vm.getContactsList().getValue().get(position));
             }
             public void onLongItemClick(View view, int position) {}
         }));

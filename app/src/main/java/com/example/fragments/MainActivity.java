@@ -32,19 +32,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        vm = new ViewModelMain();
-//        contacts= findViewById(R.id.contacts);
-//        contacts.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-//        contacts.setAdapter(new MyAdapter(vm.getContactsList().getValue()));
-//        contacts.addOnItemTouchListener(new RecyclerItemClickListener(this, contacts ,new OnItemClickListener() {
-//            public void onItemClick(View view, int position) {
-//                Toast t= Toast.makeText(view.getContext(), vm.getContactsList().getValue().get(position).getName(), Toast.LENGTH_SHORT);
-//                t.show();
-//            }
-//            public void onLongItemClick(View view, int position) {
-//
-//            }
-//        }));
+        vm= new ViewModelMain();
+        Bundle args= new Bundle();
+        args.putSerializable("viewModel", vm);
+        DetailsFragment details= new DetailsFragment();
+        details.setArguments(args);
+        ListFragment list= new ListFragment();
+        list.setArguments(args);
     }
 }
 
