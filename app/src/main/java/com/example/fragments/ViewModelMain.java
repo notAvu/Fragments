@@ -11,6 +11,9 @@ public class ViewModelMain extends ViewModel {
    private MutableLiveData<ArrayList<Contact>> contactsList;
 
 
+    private MutableLiveData<Contact> selectedContact;
+
+
     public ViewModelMain() {
         contactsList= new MutableLiveData<>();
         ArrayList<Contact>contacts = new ArrayList<>();
@@ -48,5 +51,12 @@ public class ViewModelMain extends ViewModel {
 
     public void setContactsList(MutableLiveData<ArrayList<Contact>> contactsList) {
         this.contactsList = contactsList;
+    }
+    public MutableLiveData<Contact> getSelectedContact() {
+        return selectedContact;
+    }
+
+    public void setSelectedContact(MutableLiveData<Contact> selectedContact) {
+        this.selectedContact = selectedContact;
     }
 }
