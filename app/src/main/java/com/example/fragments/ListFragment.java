@@ -53,7 +53,8 @@ public class ListFragment extends Fragment {
         vm= new ViewModelProvider(requireActivity()).get(ViewModelMain.class);
         recyclerContacts.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerContacts,new OnItemClickListener() {
             public void onItemClick(View view, int position) {
-                vm.getSelectedContact().setValue(contacts.get(position));
+                vm.getState().postValue("Details");
+                vm.getSelectedContact().postValue(contacts.get(position));
 
             }
             public void onLongItemClick(View view, int position) {}

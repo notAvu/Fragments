@@ -31,13 +31,13 @@ import Clases.Contact;
 public class MainActivity extends AppCompatActivity {
     ViewModelMain vm ;
     RecyclerView contacts;
-    boolean smallScreen;
+    boolean smallScreen=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         vm= new ViewModelMain();
-        smallScreen=false;
+        smallScreen=findViewById(R.id.fragment_details_container)==null;
         vm.getState().observe(this, this::OnStateChanged);
 
     }
