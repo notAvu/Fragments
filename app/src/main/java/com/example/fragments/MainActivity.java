@@ -3,9 +3,12 @@ package com.example.fragments;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -28,17 +31,25 @@ import Clases.Contact;
 public class MainActivity extends AppCompatActivity {
     ViewModelMain vm ;
     RecyclerView contacts;
+    boolean smallScreen;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         vm= new ViewModelMain();
-        Bundle args= new Bundle();
-        args.putSerializable("viewModel", vm);
-        DetailsFragment details= new DetailsFragment();
-        details.setArguments(args);
-        ListFragment list= new ListFragment();
-        list.setArguments(args);
+        smallScreen=false;
+        vm.getState().observe(this, this::OnStateChanged);
+
+    }
+
+    private void OnStateChanged(String s) {
+        if(smallScreen){
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_details_container, DetailsFragment.class, null);
+            fragmentTransaction.setReorderingAllowed(true);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
     }
 }
 
